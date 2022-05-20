@@ -1,4 +1,34 @@
+import { useState, useEffect } from "react";
+// import Grid from '@mui/material/Grid';
+
 function App() {
+  const [currentData, setCurrentData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [pageIndex, setPageIndex] = useState(1);
+
+  useEffect(() => {
+    fetch(`http://localhost:8000/products?_page=${pageIndex}&_limit=15`)
+    .then((response) => {
+      if(!response.ok) {
+        throw new Error(`This is an HTTP error: The status is ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      setCurrentData(data);
+      setError(null);
+    })
+    .catch((err) => {
+      setError(err.message);
+      setCurrentData(null);
+    })
+    .finally(() => {
+      setLoading(false);
+    });
+  }, []);
+
   return (
     <div className='App'>
       <header>
@@ -12,6 +42,17 @@ function App() {
       </header>
 
       products goes here..
+      {loading && <div>Loading...</div>}
+      {error && <div>An error was encountered</div>}
+      <ul>
+        {currentData &&
+          currentData.map(({ id, face, prize, size, date }) => (
+            <li key={id}>
+              <p>{face} {prize} {size} {date}</p>
+            </li>
+          ))}
+      </ul>
+
     </div>
   );
 }
