@@ -6,7 +6,7 @@ const dateConvert = 1000 * 60;
 const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
-var pageIndex = 1;
+var pageIndex = 0;
 
 function App() {
   const [currentData, setCurrentData] = useState([]);
@@ -35,13 +35,14 @@ function App() {
 
   useEffect(() => {
     if (fetching) {
-      pageIndex += 1;
       fetchData();
     }
   }, [fetching]);
 
   function fetchData() {
+    pageIndex += 1;
     setLoading(true);
+    
     const url = `http://localhost:8000/products?_page=${pageIndex}&_limit=20${sortingMethod ? `&_sort=${sortingMethod}` : ``}`;
     fetch(url)
     .then((response) => {
