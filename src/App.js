@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-// import Grid from '@mui/material/Grid';
+import { Grid } from "@mui/material";
+import ProductCard from "./components/ProductCard";
 
 function App() {
   const [currentData, setCurrentData] = useState(null);
@@ -41,17 +42,17 @@ function App() {
             alt='ad'/>
       </header>
 
-      products goes here..
       {loading && <div>Loading...</div>}
       {error && <div>An error was encountered</div>}
-      <ul>
+
+      <Grid container spacing={2} columns={{ xs: 4, sm: 6, md: 8, lg: 10 }}>
         {currentData &&
-          currentData.map(({ id, face, prize, size, date }) => (
-            <li key={id}>
-              <p>{face} {prize} {size} {date}</p>
-            </li>
+          currentData.map(({ id, face, price, size, date }) => (
+            <Grid item xs={2} key={id}>
+              <ProductCard face={face} price={price} size={size} date={date}/>
+            </Grid>
           ))}
-      </ul>
+      </Grid>
 
     </div>
   );
