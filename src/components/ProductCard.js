@@ -2,7 +2,6 @@ import { Card, CardContent, Grid, Typography } from "@mui/material";
 import Box from '@mui/material/Box';
 
 export default function ProductCard(props) {
-
   return (
     <Box sx={{boxShadow: 2}}>
       <Card>
@@ -17,10 +16,10 @@ export default function ProductCard(props) {
               </Typography>
               {props.size}
             </div>
-            <p>${formatPrice(props.price)}</p>
+            <p>${props.price}</p>
           </Grid>
           <Typography align="right" variant="caption" display="block">
-            {formatDate(props.date)}
+            {props.date}
           </Typography>
         </CardContent>
       </Card>
