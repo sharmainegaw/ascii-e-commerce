@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Grid } from "@mui/material";
 import ProductCard from "./components/ProductCard";
+import { CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 
 const dateConvert = 1000 * 60;
 const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -10,9 +10,15 @@ var pageIndex = 1;
 
 function App() {
   const [currentData, setCurrentData] = useState([]);
+  const [advancedData, setAdvancedData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [fetching, setFetching] = useState(false);
+  const [sortingMethod, setSortingMethod] = useState("");
+
+  useEffect(() => {
+    fetchData();
+  }, [sortingMethod]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
@@ -20,25 +26,24 @@ function App() {
   });
 
   function handleScroll() {
-    if (document.documentElement.offsetHeight - (window.innerHeight + document.documentElement.scrollTop) < 10) {
-      setFetching(true);
+    if(!fetching) {
+      if (document.documentElement.offsetHeight - (window.innerHeight + document.documentElement.scrollTop) < 10) {
+        setFetching(true);
+      }
     }
   }
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     if (fetching) {
       pageIndex += 1;
-      setLoading(true);
       fetchData();
     }
   }, [fetching]);
 
   function fetchData() {
-    fetch(`http://localhost:8000/products?_page=${pageIndex}&_limit=20`)
+    setLoading(true);
+    const url = `http://localhost:8000/products?_page=${pageIndex}&_limit=20${sortingMethod ? `&_sort=${sortingMethod}` : ``}`;
+    fetch(url)
     .then((response) => {
       if(!response.ok) {
         throw new Error(`This is an HTTP error: The status is ${response.status}`);
@@ -55,8 +60,13 @@ function App() {
     })
     .finally(() => {
       setLoading(false);
+      setFetching(false);
     });
-    setFetching(false);
+  }
+
+  function handleChangeSortingMethod(event) {
+    setSortingMethod(event.target.value);
+    setCurrentData([]);
   }
 
   function formatPrice(price) {
@@ -74,15 +84,15 @@ function App() {
     }
     // minutes
     else if (diffMin < 60) {
-      return diffMin.toFixed() + " minute" + (diffMin > 1 && diffMin < 2 ? "" : "s") + " ago"
+      return diffMin.toString().split(".")[0] + " minute" + (diffMin > 1 && diffMin < 2 ? "" : "s") + " ago"
     }
     // hours
     else if (diffMin < 1440) {
-      return (diffMin / 60).toFixed() + " hour" + (diffMin >= 60 && diffMin < 120 ? "" : "s") + " ago"
+      return (diffMin / 60).toString().split(".")[0] + " hour" + (diffMin >= 60 && diffMin < 120 ? "" : "s") + " ago"
     }
     // days
     else if (diffMin < 10080) {
-      return (diffMin / 60 / 24).toFixed() + " day" + (diffMin >= 1440 && diffMin < 2880 ? "" : "s") + " ago"
+      return (diffMin / 60 / 24).toString().split(".")[0] + " day" + (diffMin >= 1440 && diffMin < 2880 ? "" : "s") + " ago"
     }
     else {
       return monthNames[postDate.getMonth()] + " " + postDate.getDate() + ", " + postDate.getFullYear();
@@ -91,6 +101,24 @@ function App() {
 
   return (
     <>
+      <FormControl sx={{ m: 1, minWidth: 120 }}>
+        <InputLabel id="sort-select-label">Sort</InputLabel>
+        <Select
+          labelId="sort-select-label"
+          id="sort-select"
+          value={sortingMethod}
+          label="Sorting"
+          onChange={handleChangeSortingMethod}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value="price">Price</MenuItem>
+          <MenuItem value="size">Size</MenuItem>
+          <MenuItem value="id">Id</MenuItem>
+        </Select>
+      </FormControl>
+
       <Grid container spacing={2} columns={{ xs: 4, sm: 6, md: 8, lg: 10 }}>
         {currentData &&
           currentData.map(({ id, face, price, size, date }) => (
@@ -103,7 +131,7 @@ function App() {
             </Grid>
           ))}
       </Grid>
-      {loading && <div>Loading...</div>}
+      {loading && <CircularProgress />}
       {error && <div>An error was encountered</div>}
     </>
   );
