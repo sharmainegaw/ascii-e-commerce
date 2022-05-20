@@ -14,7 +14,7 @@ export default function ProductCard(props) {
               <Typography variant="overline" display="block">
                 size
               </Typography>
-              {props.size}
+              {props.size}px
             </div>
             <p>${props.price}</p>
           </Grid>
