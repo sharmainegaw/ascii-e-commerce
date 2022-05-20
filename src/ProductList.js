@@ -66,6 +66,7 @@ function App() {
   }
 
   function handleChangeSortingMethod(event) {
+    pageIndex = 0;
     setSortingMethod(event.target.value);
     setCurrentData([]);
   }
