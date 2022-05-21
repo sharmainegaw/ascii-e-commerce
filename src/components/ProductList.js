@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
+
+import { Box, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
+
 import ProductCard from "./ProductCard";
 import AdCard from "./AdCard";
-import { Box, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 import { formatPrice, formatDate } from "../helperFunctions";
+
 var pageIndex = 0;
 
 function App() {
@@ -71,6 +74,7 @@ function App() {
 
   function appendData() {
     setCurrentData(currentState => ([...currentState, ...advancedData]));
+    setLoading(false);
   }
 
   function fetchAdvancedData() {
@@ -100,7 +104,6 @@ function App() {
       setError(err.message);
     })
     .finally(() => {
-      setLoading(false);
       setFetching(false);
       fetchAd();
     });

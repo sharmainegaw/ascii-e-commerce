@@ -10,7 +10,7 @@ export default function AdCard(props) {
           alt="green iguana"
           image={`http://localhost:8000/ads/?r=${props.imageId}`}
         />
-        <CardContent>
+        <CardContent style={{paddingTop: "0", paddingBottom: "0"}}>
           <Typography variant="overline">
             sponsored ad
           </Typography>
