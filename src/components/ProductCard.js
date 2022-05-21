@@ -1,28 +1,24 @@
-import { Card, CardContent, Grid, Typography } from "@mui/material";
-import Box from '@mui/material/Box';
+import { Box, Card, CardContent, Typography } from "@mui/material";
 
 export default function ProductCard(props) {
   return (
-    <Box sx={{boxShadow: 2}}>
-      <Card>
-        <CardContent>
-          <Typography align="center" sx={{ fontSize: props.size }}>
-            {props.face}
+    <Card sx={{boxShadow: 2, height: '100%'}}>
+      <CardContent>        
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 1}}>
+          <Typography variant="caption" display="block">
+            {props.size}px
           </Typography>
-          <Grid container justifyContent="space-between">
-            <div>
-              <Typography variant="overline" display="block">
-                size
-              </Typography>
-              {props.size}px
-            </div>
-            <p>${props.price}</p>
-          </Grid>
-          <Typography align="right" variant="caption" display="block">
+          <Typography variant="caption" display="block">
             {props.date}
           </Typography>
-        </CardContent>
-      </Card>
-    </Box>
+        </Box>
+        <Typography align="right" variant="h6" color="secondary" display="block">
+          ${props.price}
+        </Typography>
+        <Typography align="center" sx={{ fontSize: props.size, paddingTop: 2}}>
+          {props.face}
+        </Typography>
+      </CardContent>
+    </Card>
   );
 }

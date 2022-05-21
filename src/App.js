@@ -1,19 +1,20 @@
-import ProductList from './ProductList';
+import ProductList from './components/ProductList';
+import { Container } from '@mui/system';
+import { Typography } from '@mui/material';
 
 function App() {
   return (
     <div className='App'>
       <header>
-        <h1>Products Grid</h1>
-
-        <p>But first, a word from our sponsors:</p>
-        <img
-          className='ad'
-          src={`http://localhost:8000/ads/?r=${Math.floor(Math.random()*1000)}`}
-          alt='ad'/>
+        <Container>
+          <Typography variant="h5" color="secondary">
+            <h1>Products Grid</h1>
+          </Typography>
+        </Container>
       </header>
-      
-      <ProductList/>
+      <Container>
+        <ProductList/>
+      </Container>
     </div>
   );
 }
