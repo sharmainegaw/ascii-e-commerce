@@ -6,9 +6,9 @@ function App() {
   return (
     <div className='App'>
       <header>
-        <Container>
-          <Typography variant="h5" color="secondary">
-            <h1>Products Grid</h1>
+        <Container sx={{ padding: 8 }}>
+          <Typography align='center' variant="h4" color="secondary">
+            Products Grid
           </Typography>
         </Container>
       </header>
