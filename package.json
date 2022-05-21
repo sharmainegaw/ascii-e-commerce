@@ -10,7 +10,8 @@
     "json-server": "^0.16.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-scripts": "4.0.3"
+    "react-scripts": "4.0.3",
+    "typeface-roboto": "^1.1.13"
   },
   "scripts": {
     "server": "json-server server/index.js --routes server/routes.json --middlewares server/handle-delay.js server/handle-ads.js --port 8000",
