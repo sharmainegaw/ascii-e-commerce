@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
+import AdCard from "./AdCard";
 import { CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 import { formatPrice, formatDate } from "../helperFunctions";
 
-var pageIndex = 0;
-
 function App() {
+  var pageIndex = 0;
+
   const [currentData, setCurrentData] = useState([]);
   const [advancedData, setAdvancedData] = useState([]);
+  const [adIndexData, setAdIndexData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [fetching, setFetching] = useState(false);
@@ -26,7 +28,7 @@ function App() {
 
   function handleScroll() {
     if(!fetching) {
-      if (document.documentElement.offsetHeight - (window.innerHeight + document.documentElement.scrollTop) < 30) {
+      if (document.documentElement.offsetHeight - (window.innerHeight + document.documentElement.scrollTop) < 100) {
         setFetching(true);
       }
     }
@@ -62,6 +64,7 @@ function App() {
     .finally(() => {
       setLoading(false);
       setFetching(false);
+      fetchAd();
     });
   }
 
@@ -70,8 +73,8 @@ function App() {
   }
 
   function fetchAdvancedData() {
-    pageIndex += 1;
     setLoading(true);
+    pageIndex += 1;
     
     const url = `http://localhost:8000/products?_page=${pageIndex}&_limit=20${sortingMethod ? `&_sort=${sortingMethod}` : ``}`;
     console.log(url);
@@ -98,14 +101,25 @@ function App() {
     .finally(() => {
       setLoading(false);
       setFetching(false);
+      fetchAd();
     });
+  }
+
+  function fetchAd() {
+    do {
+      var tempAdIndex = Math.floor(Math.random()*1000);
+    } while(adIndexData.includes(tempAdIndex));
+
+    setAdIndexData(currentData => ([...currentData, ...[tempAdIndex]]));
   }
 
   function handleChangeSortingMethod(event) {
     pageIndex = 0;
-    setSortingMethod(event.target.value);
     setCurrentData([]);
+    setAdvancedData([]);
+    setSortingMethod(event.target.value);
     setEmptyData(false);
+    setAdIndexData([]);
   }
 
   return (
@@ -130,14 +144,22 @@ function App() {
 
       <Grid container spacing={2} columns={{ xs: 4, sm: 6, md: 8, lg: 10 }}>
         {currentData &&
-          currentData.map(({ id, face, price, size, date }) => (
-            <Grid item xs={2} key={id}>
-              <ProductCard
-                face={face}
-                price={formatPrice(price)}
-                size={size}
-                date={formatDate(date)}/>
-            </Grid>
+          currentData.map((data, index) => (
+            <>
+              <Grid item xs={2} key={data.id}>
+                <ProductCard
+                  face={data.face}
+                  price={formatPrice(data.price)}
+                  size={data.size}
+                  date={formatDate(data.date)}/>
+              </Grid>
+              {
+                ((index + 1) % 20 == 0) &&
+                <Grid item xs={2} key={data.id}>
+                  <AdCard imageId={adIndexData[(index + 1)/20]}/>
+                </Grid>
+              }
+            </>
           ))}
       </Grid>
       {loading && <CircularProgress />}
