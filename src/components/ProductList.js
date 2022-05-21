@@ -90,7 +90,6 @@ function App() {
     pageIndex += 1;
     
     const url = `http://localhost:8000/products?_page=${pageIndex}&_limit=20${sortingMethod ? `&_sort=${sortingMethod}` : ``}`;
-    console.log(url);
     fetch(url)
     .then((response) => {
       if(!response.ok) {
@@ -99,7 +98,7 @@ function App() {
       return response.json();
     })
     .then((newData) => {
-      if(newData.length == 0) {
+      if(newData.length === 0) {
         setEmptyData(true);
       }
       setAdvancedData(newData);
@@ -165,7 +164,7 @@ function App() {
                   date={formatDate(data.date)}/>
               </Grid>
               {
-                ((index + 1) % 20 == 0) &&
+                ((index + 1) % 20 === 0) &&
                 <Grid item xs={3} key={`ad_${data.id}`}>
                   <AdCard imageId={adIndexData[(index + 1)/20]}/>
                 </Grid>
