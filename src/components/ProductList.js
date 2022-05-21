@@ -169,8 +169,6 @@ function App() {
             </>
           ))}
       </Grid>
-      <CustomMessage message="An error was encountered."/>
-      <CustomMessage message="~ end of catalogue ~"/>
       {loading && <CustomProgress />}
       {error && <CustomMessage message="An error was encountered."/>}
       {emptyData && <CustomMessage message="~ end of catalogue ~"/>}
