@@ -12,7 +12,7 @@ export default function ProductCard(props) {
             {props.date}
           </Typography>
         </Box>
-        <Typography align="right" display="block">
+        <Typography align="right" variant="h6" color="secondary" display="block">
           ${props.price}
         </Typography>
         <Typography align="center" sx={{ fontSize: props.size, paddingTop: 2}}>
