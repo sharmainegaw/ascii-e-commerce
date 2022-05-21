@@ -142,7 +142,7 @@ function App() {
         </Select>
       </FormControl>
 
-      <Grid container spacing={2} columns={{ xs: 4, sm: 6, md: 8, lg: 10 }}>
+      <Grid container alignItems="stretch" spacing={2} columns={{ xs: 4, sm: 6, md: 8}}>
         {currentData &&
           currentData.map((data, index) => (
             <>
