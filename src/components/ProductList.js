@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 
-import { Box, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
+import { Box, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 
 import ProductCard from "./ProductCard";
 import AdCard from "./AdCard";
+import CustomProgress from "./CustomProgress";
+import CustomMessage from "./CustomMessage";
 import { formatPrice, formatDate } from "../helperFunctions";
 
 var pageIndex = 0;
@@ -41,7 +43,9 @@ function App() {
   useEffect(() => {
     if (fetching) {
       appendData();
-      fetchAdvancedData();
+      if (!emptyData) {
+        fetchAdvancedData();
+      }
     }
   }, [fetching]);
 
@@ -91,14 +95,11 @@ function App() {
       return response.json();
     })
     .then((newData) => {
-      if(newData.length != 0) {
-        setAdvancedData(newData);
-        setError(null);
-      }
-      else {
+      if(newData.length == 0) {
         setEmptyData(true);
-        setError(null);
       }
+      setAdvancedData(newData);
+      setError(null);
     })
     .catch((err) => {
       setError(err.message);
@@ -168,9 +169,11 @@ function App() {
             </>
           ))}
       </Grid>
-      {loading && <CircularProgress />}
-      {error && <div>An error was encountered</div>}
-      {emptyData && <div>~ end of catalogue ~</div>}
+      <CustomMessage message="An error was encountered."/>
+      <CustomMessage message="~ end of catalogue ~"/>
+      {loading && <CustomProgress />}
+      {error && <CustomMessage message="An error was encountered."/>}
+      {emptyData && <CustomMessage message="~ end of catalogue ~"/>}
     </>
   );
 }
