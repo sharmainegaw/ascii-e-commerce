@@ -11,43 +11,24 @@ import { formatPrice, formatDate } from "../helperFunctions";
 var pageIndex = 0;
 
 function App() {
-
+  // for storing data
   const [currentData, setCurrentData] = useState([]);
   const [advancedData, setAdvancedData] = useState([]);
   const [adIndexData, setAdIndexData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [fetching, setFetching] = useState(false);
+  
   const [sortingMethod, setSortingMethod] = useState("");
+
+  // for checking states
+  const [loading, setLoading] = useState(true);
+  const [fetching, setFetching] = useState(false);
   const [emptyData, setEmptyData] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchAd();
     fetchInitialData();
     fetchAdvancedData();
   }, [sortingMethod]);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () =>  window.removeEventListener('scroll', handleScroll);
-  });
-
-  function handleScroll() {
-    if(!fetching) {
-      if (document.documentElement.offsetHeight - (window.innerHeight + document.documentElement.scrollTop) < 100) {
-        setFetching(true);
-      }
-    }
-  }
-
-  useEffect(() => {
-    if (fetching) {
-      appendData();
-      if (!emptyData) {
-        fetchAdvancedData();
-      }
-    }
-  }, [fetching]);
 
   function fetchInitialData() {
     pageIndex += 1;
@@ -75,6 +56,29 @@ function App() {
       fetchAd();
     });
   }
+
+  // for fetching data on scroll
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () =>  window.removeEventListener('scroll', handleScroll);
+  });
+
+  function handleScroll() {
+    if(!fetching) {
+      if (document.documentElement.offsetHeight - (window.innerHeight + document.documentElement.scrollTop) < 100) {
+        setFetching(true);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (fetching) {
+      appendData();
+      if (!emptyData) {
+        fetchAdvancedData();
+      }
+    }
+  }, [fetching]);
 
   function appendData() {
     setCurrentData(currentState => ([...currentState, ...advancedData]));
@@ -169,6 +173,7 @@ function App() {
             </>
           ))}
       </Grid>
+      
       {loading && <CustomProgress />}
       {error && <CustomMessage message="An error was encountered."/>}
       {emptyData && <CustomMessage message="~ end of catalogue ~"/>}
