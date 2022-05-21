@@ -1,4 +1,5 @@
 import ProductList from './components/ProductList';
+import { Container } from '@mui/system';
 
 function App() {
   return (
@@ -6,8 +7,9 @@ function App() {
       <header>
         <h1>Products Grid</h1>        
       </header>
-      
-      <ProductList/>
+      <Container>
+        <ProductList/>
+      </Container>
     </div>
   );
 }
