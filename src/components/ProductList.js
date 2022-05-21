@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import AdCard from "./AdCard";
-import { CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
+import { Box, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 import { formatPrice, formatDate } from "../helperFunctions";
+var pageIndex = 0;
 
 function App() {
-  var pageIndex = 0;
 
   const [currentData, setCurrentData] = useState([]);
   const [advancedData, setAdvancedData] = useState([]);
@@ -17,6 +17,7 @@ function App() {
   const [emptyData, setEmptyData] = useState(false);
 
   useEffect(() => {
+    fetchAd();
     fetchInitialData();
     fetchAdvancedData();
   }, [sortingMethod]);
@@ -124,29 +125,31 @@ function App() {
 
   return (
     <>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="sort-select-label">Sort</InputLabel>
-        <Select
-          labelId="sort-select-label"
-          id="sort-select"
-          value={sortingMethod}
-          label="Sorting"
-          onChange={handleChangeSortingMethod}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value="price">Price</MenuItem>
-          <MenuItem value="size">Size</MenuItem>
-          <MenuItem value="id">Id</MenuItem>
-        </Select>
-      </FormControl>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end'}}>
+        <FormControl sx={{ m: 1, minWidth: 120 }}>
+          <InputLabel id="sort-select-label">Sort</InputLabel>
+          <Select
+            labelId="sort-select-label"
+            id="sort-select"
+            value={sortingMethod}
+            label="Sorting"
+            onChange={handleChangeSortingMethod}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value="price">Price</MenuItem>
+            <MenuItem value="size">Size</MenuItem>
+            <MenuItem value="id">Id</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
-      <Grid container alignItems="stretch" spacing={2} columns={{ xs: 4, sm: 6, md: 8}}>
+      <Grid container alignItems="stretch" spacing={4} columns={{ xs: 3, sm: 6, md: 9}}>
         {currentData &&
           currentData.map((data, index) => (
             <>
-              <Grid item xs={2} key={data.id}>
+              <Grid item xs={3} key={data.id}>
                 <ProductCard
                   face={data.face}
                   price={formatPrice(data.price)}
@@ -155,7 +158,7 @@ function App() {
               </Grid>
               {
                 ((index + 1) % 20 == 0) &&
-                <Grid item xs={2} key={data.id}>
+                <Grid item xs={3} key={`ad_${data.id}`}>
                   <AdCard imageId={adIndexData[(index + 1)/20]}/>
                 </Grid>
               }
